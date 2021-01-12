@@ -354,12 +354,12 @@ export default {
         mapTypeControl: true,
         mapTypeControlOptions: {
           style: window.naver.maps.MapTypeControlStyle.BUTTON,
-          position: window.naver.maps.Position.TOP_RIGHT,
+          position: window.naver.maps.Position.TOP_LEFT,
         },
         zoomControl: true,
         zoomControlOptions: {
-          style: window.naver.maps.ZoomControlStyle.SMALL,
-          position: window.naver.maps.Position.TOP_RIGHT,
+          style: window.naver.maps.ZoomControlStyle.LARGE,
+          position: window.naver.maps.Position.TOP_LEFT,
         },
         ...settings,
         ...this.mapOptions,
