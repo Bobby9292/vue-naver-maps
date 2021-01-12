@@ -466,7 +466,7 @@ export default {
       });
 
       window.naver.maps.Event.addListener(this.map, "idle", function () {
-        updateMarkers(this.map, this.markers);
+        updateMarkers(map, this.markers);
       });
 
       function updateMarkers(map, markers) {
