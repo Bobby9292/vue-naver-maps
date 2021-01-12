@@ -190,7 +190,6 @@ export default {
      * @returns {naver.maps.Coord}
      */
     getCenter() {
-      console.log(this.map.getCenter());
       return this.map.getCenter();
     },
     /**
