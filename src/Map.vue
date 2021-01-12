@@ -369,7 +369,7 @@ export default {
         console.log(this.zoomControlOptions.position);
       this.setOptions({
         zoomControlOptions: {
-          position: naver.maps.Position.TOP_RIGHT,
+          position: naver.maps.Position.position,
         },
       });
       window.$naverMapsCallback.forEach((v) => v(this.map));
