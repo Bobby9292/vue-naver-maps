@@ -61,6 +61,11 @@ export default {
           normal: window.naver.maps.NaverStyleMapTypeOption.getNormalMap({
             overlayType: newValue.map((layer) => layers[layer]).join("."),
           }),
+          satellite: window.naver.maps.NaverStyleMapTypeOption.getSatelliteMap({
+            overlayType: this.initLayers
+              .map((layer) => layers[layer])
+              .join("."),
+          }),
         });
         this.setOptions("mapTypes", settings.mapTypes);
       },
@@ -339,6 +344,9 @@ export default {
       };
       settings.mapTypes = new window.naver.maps.MapTypeRegistry({
         normal: window.naver.maps.NaverStyleMapTypeOption.getNormalMap({
+          overlayType: this.initLayers.map((layer) => layers[layer]).join("."),
+        }),
+        satellite: window.naver.maps.NaverStyleMapTypeOption.getSatelliteMap({
           overlayType: this.initLayers.map((layer) => layers[layer]).join("."),
         }),
       });
