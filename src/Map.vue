@@ -351,16 +351,17 @@ export default {
         }),
       });
       this.map = new window.naver.maps.Map("vue-naver-maps", {
-        mapTypeControl: true,
-        mapTypeControlOptions: {
-          style: window.naver.maps.MapTypeControlStyle.BUTTON,
-          position: window.naver.maps.Position.TOP_LEFT,
-        },
         zoomControl: true,
         zoomControlOptions: {
           style: window.naver.maps.ZoomControlStyle.LARGE,
           position: window.naver.maps.Position.TOP_LEFT,
         },
+        mapTypeControl: true,
+        mapTypeControlOptions: {
+          style: window.naver.maps.MapTypeControlStyle.BUTTON,
+          position: window.naver.maps.Position.TOP_LEFT,
+        },
+
         ...settings,
         ...this.mapOptions,
       });
