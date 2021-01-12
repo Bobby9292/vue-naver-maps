@@ -466,28 +466,28 @@ export default {
       });
 
       window.naver.maps.Event.addListener(this.map, "idle", function () {
-        updateMarkers();
+        updateMarkers(this.map, this.markers);
       });
 
-      function updateMarkers() {
-        var mapBounds = this.map.getBounds();
+      function updateMarkers(map, markers) {
+        var mapBounds = map.getBounds();
         var marker, position;
 
-        for (var i = 0; i < this.markers.length; i++) {
-          marker = this.markers[i];
+        for (var i = 0; i < markers.length; i++) {
+          marker = markers[i];
           position = marker.getPosition();
 
           if (mapBounds.hasLatLng(position)) {
-            showMarker(marker);
+            showMarker(map, marker);
           } else {
             hideMarker(marker);
           }
         }
       }
 
-      function showMarker(marker) {
+      function showMarker(map, marker) {
         if (marker.setMap()) return;
-        marker.setMap(this.map);
+        marker.setMap(map);
       }
 
       function hideMarker(marker) {
