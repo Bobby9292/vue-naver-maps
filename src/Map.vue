@@ -437,6 +437,7 @@ export default {
       ].forEach((name) => _.addEvent(this, this.map, name));
       this.$emit("load", this);
       this.markersData.forEach((marker) => {
+        console.log(marker.name);
         let position = window.naver.maps.LatLng(
           marker.latitude,
           marker.longitude
