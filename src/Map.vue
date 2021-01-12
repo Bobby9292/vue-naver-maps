@@ -464,58 +464,6 @@ export default {
         this.markers.push(newMarker);
         this.infoWindows.push(infoWindow);
       });
-
-      window.naver.maps.Event.addListener(this.map, "idle", function () {
-        updateMarkers(map, this.markers);
-      });
-
-      function updateMarkers(map, markers) {
-        var mapBounds = map.getBounds();
-        var marker, position;
-
-        for (var i = 0; i < markers.length; i++) {
-          marker = markers[i];
-          position = marker.getPosition();
-
-          if (mapBounds.hasLatLng(position)) {
-            showMarker(map, marker);
-          } else {
-            hideMarker(marker);
-          }
-        }
-      }
-
-      function showMarker(map, marker) {
-        if (marker.setMap()) return;
-        marker.setMap(map);
-      }
-
-      function hideMarker(marker) {
-        if (!marker.setMap()) return;
-        marker.setMap(null);
-      }
-
-      // Return an event handler storing the marker index as a closure variable named seq.
-      function getClickHandler(seq) {
-        return function () {
-          var marker = this.markers[seq],
-            infoWindow = this.infoWindows[seq];
-
-          if (infoWindow.getMap()) {
-            infoWindow.close();
-          } else {
-            infoWindow.open(this.map, marker);
-          }
-        };
-      }
-
-      for (var i = 0, ii = this.markers.length; i < ii; i++) {
-        window.naver.maps.Event.addListener(
-          this.markers[i],
-          "click",
-          getClickHandler(i)
-        );
-      }
     },
   },
   mounted() {
