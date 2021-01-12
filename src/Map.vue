@@ -12,6 +12,7 @@ export default {
   props: {
     width: Number,
     height: Number,
+    markersData: Array,
     mapOptions: {
       type: Object,
       required: true,
@@ -20,6 +21,8 @@ export default {
   },
   data() {
     return {
+      markers: [],
+      infoWindows: [],
       mapStyle: {
         width: `${this.width}px`,
         height: `${this.height}px`,
@@ -433,10 +436,86 @@ export default {
         "zooming",
       ].forEach((name) => _.addEvent(this, this.map, name));
       this.$emit("load", this);
-      let marker = new window.naver.maps.Marker({
-        position: new window.naver.maps.LatLng(37.3595704, 127.105399),
-        map: this.map,
+      this.markersData.forEach((marker) => {
+        let position = window.naver.maps.LatLng(
+          marker.latitude,
+          marker.longitude
+        );
+        let battery = marker.battery;
+        let name = marker.name;
+        let status = marker.status;
+        let i = 0;
+        let newMarker = new window.naver.maps.Marker({
+          map: this.map,
+          position: position,
+          title: i++,
+          zIndex: 100,
+        });
+        let infoWindow = new window.naver.maps.InfoWindow({
+          content:
+            '<div style="width:150px;text-align:center;padding:10px;">Battery<b>"' +
+            name +
+            " - " +
+            battery +
+            " - " +
+            status +
+            '"</b></div>',
+        });
+        this.markers.push(newMarker);
+        this.infoWindows.push(infoWindow);
       });
+
+      window.naver.maps.Event.addListener(this.map, "idle", function () {
+        updateMarkers();
+      });
+
+      function updateMarkers() {
+        var mapBounds = this.map.getBounds();
+        var marker, position;
+
+        for (var i = 0; i < this.markers.length; i++) {
+          marker = this.markers[i];
+          position = marker.getPosition();
+
+          if (mapBounds.hasLatLng(position)) {
+            showMarker(marker);
+          } else {
+            hideMarker(marker);
+          }
+        }
+      }
+
+      function showMarker(marker) {
+        if (marker.setMap()) return;
+        marker.setMap(this.map);
+      }
+
+      function hideMarker(marker) {
+        if (!marker.setMap()) return;
+        marker.setMap(null);
+      }
+
+      // Return an event handler storing the marker index as a closure variable named seq.
+      function getClickHandler(seq) {
+        return function () {
+          var marker = this.markers[seq],
+            infoWindow = this.infoWindows[seq];
+
+          if (infoWindow.getMap()) {
+            infoWindow.close();
+          } else {
+            infoWindow.open(this.map, marker);
+          }
+        };
+      }
+
+      for (var i = 0, ii = this.markers.length; i < ii; i++) {
+        window.naver.maps.Event.addListener(
+          this.markers[i],
+          "click",
+          getClickHandler(i)
+        );
+      }
     },
   },
   mounted() {
