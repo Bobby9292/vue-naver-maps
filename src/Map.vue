@@ -66,6 +66,16 @@ export default {
               .map((layer) => layers[layer])
               .join("."),
           }),
+          hybrid: window.naver.maps.NaverStyleMapTypeOption.getHybridMap({
+            overlayType: this.initLayers
+              .map((layer) => layers[layer])
+              .join("."),
+          }),
+          terrain: window.naver.maps.NaverStyleMapTypeOption.getTerrainMap({
+            overlayType: this.initLayers
+              .map((layer) => layers[layer])
+              .join("."),
+          }),
         });
         this.setOptions("mapTypes", settings.mapTypes);
       },
@@ -349,12 +359,18 @@ export default {
         satellite: window.naver.maps.NaverStyleMapTypeOption.getSatelliteMap({
           overlayType: this.initLayers.map((layer) => layers[layer]).join("."),
         }),
+        hybrid: window.naver.maps.NaverStyleMapTypeOption.getHybridMap({
+          overlayType: this.initLayers.map((layer) => layers[layer]).join("."),
+        }),
+        terrain: window.naver.maps.NaverStyleMapTypeOption.getTerrainMap({
+          overlayType: this.initLayers.map((layer) => layers[layer]).join("."),
+        }),
       });
       this.map = new window.naver.maps.Map("vue-naver-maps", {
         zoomControl: true,
         zoomControlOptions: {
           style: window.naver.maps.ZoomControlStyle.LARGE,
-          position: window.naver.maps.Position.LEFT_TOP,
+          position: window.naver.maps.Position.LEFT_CENTER,
         },
         mapTypeControl: true,
         mapTypeControlOptions: {
@@ -366,12 +382,11 @@ export default {
         ...this.mapOptions,
       });
       if (this.zoomControlOptions && this.zoomControlOptions.position)
-        console.log(this.zoomControlOptions.position);
-      this.setOptions({
-        zoomControlOptions: {
-          position: naver.maps.Position.position,
-        },
-      });
+        this.setOptions({
+          zoomControlOptions: {
+            position: naver.maps.Position.position,
+          },
+        });
       window.$naverMapsCallback.forEach((v) => v(this.map));
       window.$naverMapsCallback = [];
       window.$naverMapsLoaded = true;
