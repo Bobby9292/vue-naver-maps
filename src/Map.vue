@@ -433,6 +433,10 @@ export default {
         "zooming",
       ].forEach((name) => _.addEvent(this, this.map, name));
       this.$emit("load", this);
+      let marker = new window.naver.maps.Marker({
+        position: new window.naver.maps.LatLng(37.3595704, 127.105399),
+        map: this.map,
+      });
     },
   },
   mounted() {
