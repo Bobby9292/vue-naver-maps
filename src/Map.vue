@@ -347,11 +347,12 @@ export default {
         ...this.mapOptions,
       });
       if (this.zoomControlOptions && this.zoomControlOptions.position)
-        this.setOptions({
-          zoomControlOptions: {
-            position: naver.maps.Position.TOP_RIGHT,
-          },
-        });
+        console.log(this.zoomControlOptions.position);
+      this.setOptions({
+        zoomControlOptions: {
+          position: naver.maps.Position.TOP_RIGHT,
+        },
+      });
       window.$naverMapsCallback.forEach((v) => v(this.map));
       window.$naverMapsCallback = [];
       window.$naverMapsLoaded = true;
