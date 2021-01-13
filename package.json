@@ -23,6 +23,8 @@
   "dependencies": {
     "vue": "^2.6.12"
   },
+  "eslintConfig": {
+  },
   "devDependencies": {
     "@babel/cli": "^7.12.10",
     "@babel/core": "^7.12.10",

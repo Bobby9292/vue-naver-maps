@@ -21,8 +21,6 @@ export default {
   },
   data() {
     return {
-      markers: [],
-      infoWindows: [],
       mapStyle: {
         width: `${this.width}px`,
         height: `${this.height}px`,
@@ -436,35 +434,88 @@ export default {
         "zooming",
       ].forEach((name) => _.addEvent(this, this.map, name));
       this.$emit("load", this);
-      this.markersData.forEach((marker) => {
-        console.log(marker.name);
-        let position = window.naver.maps.LatLng(
-          marker.latitude,
-          marker.longitude
-        );
-        let battery = marker.battery;
-        let name = marker.name;
-        let status = marker.status;
-        let i = 0;
-        let newMarker = new window.naver.maps.Marker({
-          map: this.map,
-          position: position,
-          title: i++,
-          zIndex: 100,
+      //Call the generateMarkers function to display them on the map.
+      this.generateMarkers();
+    },
+    generateMarkers() {
+      let markers = [],
+        infoWindows = [];
+      let map = this.map;
+      let updateMarkers = this.updateMarkers;
+
+      for (let i = 0; i < this.markersData.length; i++) {
+        let marker = new naver.maps.Marker({
+          position: new naver.maps.LatLng(
+            this.markersData[i].longitude,
+            this.markersData[i].latitude
+          ),
+          map: map,
         });
-        let infoWindow = new window.naver.maps.InfoWindow({
-          content:
-            '<div style="width:150px;text-align:center;padding:10px;">Battery<b>"' +
-            name +
-            " - " +
-            battery +
-            " - " +
-            status +
-            '"</b></div>',
+        let contentString = [
+          '<div class="iw_inner black--text">',
+          "   <h2>" + this.markersData[i].name + "</h2>",
+          '   <p> Marker status: <b class="blue--text">' +
+            this.markersData[i].status +
+            '</b><br> Marker battery level: <b class="blue--text">' +
+            this.markersData[i].battery +
+            "</b><br>",
+          "</div>",
+        ].join("");
+        let infowindow = new naver.maps.InfoWindow({
+          content: contentString,
         });
-        this.markers.push(newMarker);
-        this.infoWindows.push(infoWindow);
+        markers.push(marker);
+        infoWindows.push(infowindow);
+      }
+      naver.maps.Event.addListener(map, "idle", function() {
+        updateMarkers(map, markers);
       });
+
+      for (var i = 0, ii = markers.length; i < ii; i++) {
+        naver.maps.Event.addListener(
+          markers[i],
+          "click",
+          this.getClickHandler(markers, infoWindows, i, map)
+        );
+      }
+    },
+    updateMarkers(map, markers) {
+      let mapBounds = map.getBounds();
+      let marker, position;
+
+      for (let i = 0; i < markers.length; i++) {
+        marker = markers[i];
+        position = marker.getPosition();
+
+        if (mapBounds.hasLatLng(position)) {
+          this.showMarker(map, marker);
+        } else {
+          this.hideMarker(map, marker);
+        }
+      }
+    },
+    showMarker(map, marker) {
+      if (marker.setMap()) return;
+      marker.setMap(map);
+    },
+
+    hideMarker(map, marker) {
+      if (!marker.setMap()) return;
+      marker.setMap(null);
+    },
+
+    // Return an event handler storing the marker index as a closure letiable named seq.
+    getClickHandler(markers, infoWindows, seq, map) {
+      return function(e) {
+        let marker = markers[seq],
+          infoWindow = infoWindows[seq];
+
+        if (infoWindow.getMap()) {
+          infoWindow.close();
+        } else {
+          infoWindow.open(map, marker);
+        }
+      };
     },
   },
   mounted() {
