@@ -446,19 +446,30 @@ export default {
       for (let i = 0; i < this.markersData.length; i++) {
         let marker = new naver.maps.Marker({
           position: new naver.maps.LatLng(
-            this.markersData[i].longitude,
-            this.markersData[i].latitude
+            this.markersData[i].latitude,
+            this.markersData[i].longitude
           ),
           map: map,
         });
         let contentString = [
           '<div class="iw_inner black--text">',
           "   <h2>" + this.markersData[i].name + "</h2>",
-          '   <p> Marker status: <b class="blue--text">' +
+          '   <p> <u>Status:</u> <b class="blue--text">' +
             this.markersData[i].status +
-            '</b><br> Marker battery level: <b class="blue--text">' +
+            '</b> - <u>Battery:</u> <b class="blue--text">' +
             this.markersData[i].battery +
-            "</b><br>",
+            "</b><br> <u>MarkerID:</u> " +
+            this.markersData[i].id +
+            "<br> <u>Address:</u> " +
+            this.markersData[i].street +
+            ", " +
+            this.markersData[i].state +
+            ", " +
+            this.markersData[i].country +
+            ".<br> <u>Location:</u> " +
+            this.markersData[i].latitude +
+            ", " +
+            this.markersData[i].longitude,
           "</div>",
         ].join("");
         let infowindow = new naver.maps.InfoWindow({
@@ -478,6 +489,58 @@ export default {
           this.getClickHandler(markers, infoWindows, i, map)
         );
       }
+      // var htmlMarker1 = {
+      //     content:
+      //       '<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:white;text-align:center;font-weight:bold;background:url(/images/cluster-marker-1.png);background-size:contain;"></div>',
+      //     size: N.Size(40, 40),
+      //     anchor: N.Point(20, 20),
+      //   },
+      //   htmlMarker2 = {
+      //     content:
+      //       '<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:white;text-align:center;font-weight:bold;background:url(/images/cluster-marker-2.png);background-size:contain;"></div>',
+      //     size: N.Size(40, 40),
+      //     anchor: N.Point(20, 20),
+      //   },
+      //   htmlMarker3 = {
+      //     content:
+      //       '<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:white;text-align:center;font-weight:bold;background:url(/images/cluster-marker-3.png);background-size:contain;"></div>',
+      //     size: N.Size(40, 40),
+      //     anchor: N.Point(20, 20),
+      //   },
+      //   htmlMarker4 = {
+      //     content:
+      //       '<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:white;text-align:center;font-weight:bold;background:url(/images/cluster-marker-4.png);background-size:contain;"></div>',
+      //     size: N.Size(40, 40),
+      //     anchor: N.Point(20, 20),
+      //   },
+      //   htmlMarker5 = {
+      //     content:
+      //       '<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:white;text-align:center;font-weight:bold;background:url(/images/cluster-marker-5.png);background-size:contain;"></div>',
+      //     size: N.Size(40, 40),
+      //     anchor: N.Point(20, 20),
+      //   };
+
+      // var markerClustering = new MarkerClustering({
+      //   minClusterSize: 2,
+      //   maxZoom: 13,
+      //   map: map,
+      //   markers: markers,
+      //   disableClickZoom: false,
+      //   gridSize: 120,
+      //   icons: [
+      //     htmlMarker1,
+      //     htmlMarker2,
+      //     htmlMarker3,
+      //     htmlMarker4,
+      //     htmlMarker5,
+      //   ],
+      //   indexGenerator: [10, 100, 200, 500, 1000],
+      //   stylingFunction: function(clusterMarker, count) {
+      //     $(clusterMarker.getElement())
+      //       .find("div:first-child")
+      //       .text(count);
+      //   },
+      // });
     },
     updateMarkers(map, markers) {
       let mapBounds = map.getBounds();
